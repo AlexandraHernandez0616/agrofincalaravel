@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('rol', 20)->comment('ADMINISTRADOR, MAYORDOMO, TRABAJADOR');
             $table->boolean('activo')->default(true);
             $table->dateTime('fecha_creacion')->useCurrent();
+            $table->rememberToken();
         });
     }
 
