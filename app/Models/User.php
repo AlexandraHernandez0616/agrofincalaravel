@@ -52,4 +52,60 @@ class User extends Authenticatable
     {
         return $this->password_hash;
     }
+
+    /**
+     * Get user full name.
+     */
+    public function getNameAttribute()
+    {
+        return trim(($this->nombres ?? '') . ' ' . ($this->apellidos ?? '')) ?: ($this->username ?? 'Usuario');
+    }
+
+    /**
+     * Get user full name.
+     */
+    public function getFullNameAttribute()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get user avatar initials.
+     */
+    public function getInitialsAttribute()
+    {
+        $first = mb_substr($this->nombres ?? $this->username ?? 'A', 0, 1);
+        $last = mb_substr($this->apellidos ?? '', 0, 1);
+        return strtoupper($first . $last);
+    }
+
+    /**
+     * Get formatted creation date.
+     */
+    public function getFormattedFechaCreacionAttribute()
+    {
+        if (!$this->fecha_creacion) {
+            return 'No registrada';
+        }
+        try {
+            return \Carbon\Carbon::parse($this->fecha_creacion)->translatedFormat('d \d\e F, Y');
+        } catch (\Exception $e) {
+            return $this->fecha_creacion;
+        }
+    }
+
+    /**
+     * Get simple creation date (YYYY-MM-DD).
+     */
+    public function getFechaCreacionDateAttribute()
+    {
+        if (!$this->fecha_creacion) {
+            return date('Y-m-d');
+        }
+        try {
+            return \Carbon\Carbon::parse($this->fecha_creacion)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return substr($this->fecha_creacion, 0, 10);
+        }
+    }
 }
