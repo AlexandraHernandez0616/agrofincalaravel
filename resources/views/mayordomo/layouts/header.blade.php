@@ -1,21 +1,51 @@
 <!-- ======================================================================
-     TOPBAR / HEADER SUPERIOR MAYORDOMO (SIN SIDEBAR)
+     TOPBAR / HEADER SUPERIOR MAYORDOMO (ESTILO ADMIN AGROFINCA)
      ====================================================================== -->
-<header class="admin-top-header" style="padding: 12px 28px; background: #ffffff; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
-  <div class="top-header-left" style="display: flex; align-items: center; gap: 16px;">
-    <!-- Logo AgroFinca -->
-    <a href="{{ route('mayordomo.dashboard') }}" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
-      <div style="background: #10b981; color: #fff; width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
-      </div>
-      <div>
-        <span style="font-size: 18px; font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">Agro<span style="color: #10b981;">Finca</span></span>
-        <span style="font-size: 11px; font-weight: 700; color: #059669; margin-left: 6px; background: #ecfdf5; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px; text-transform: uppercase;">Mayordomo</span>
-      </div>
-    </a>
+<header class="admin-top-header">
+  <div class="top-header-left">
+    <button class="btn-toggle-menu" id="sidebarToggle" title="Alternar menú lateral">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+    </button>
+
+    <!-- Título del Sistema o Barra de Búsqueda -->
+    <div class="top-search-wrapper">
+      <svg class="search-svg-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" class="top-search-input" id="mayordomoGlobalSearch" placeholder="Buscar trabajadores, tareas, insumos..." />
+      <span class="search-key-hint">Ctrl+K</span>
+    </div>
   </div>
 
   <div class="top-header-right">
+    <!-- Badge Mayordomo -->
+    <span style="background: rgba(16, 185, 129, 0.15); color: #059669; font-weight: 700; font-size: 12px; padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3);">
+      Mayordomo
+    </span>
+
+    <!-- Notificaciones Operativas -->
+    <div style="position: relative;">
+      <button class="header-icon-button" data-af-toggle="dropdown" data-af-target="mayordomoNotificationsMenu" title="Notificaciones">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+        <span class="header-badge-dot"></span>
+      </button>
+
+      <!-- Menú Desplegable Notificaciones -->
+      <div class="af-dropdown-box" id="mayordomoNotificationsMenu" style="width: 320px;">
+        <div class="dropdown-user-header">
+          <div class="dropdown-user-title">Notificaciones Operativas</div>
+          <div class="dropdown-user-sub">Alertas y tareas recientes en campo</div>
+        </div>
+        <div style="display: flex; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--bg-color); margin-bottom: 8px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #10b981; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 500;">Registro de asistencia activo para la jornada de hoy.</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Sistema Operativo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Menú de Perfil de Usuario -->
     <div class="user-profile-menu-container">
       <button class="user-profile-btn" data-af-toggle="dropdown" data-af-target="mayordomoProfileMenu">
@@ -24,7 +54,7 @@
         </div>
         <div class="user-profile-text">
           <div class="user-profile-name">{{ Auth::user()->name ?? 'Mayordomo' }}</div>
-          <div class="user-profile-role" style="color: #059669; font-weight: 700;">MAYORDOMO</div>
+          <div class="user-profile-role">{{ Auth::user()->rol ?? 'MAYORDOMO' }}</div>
         </div>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </button>

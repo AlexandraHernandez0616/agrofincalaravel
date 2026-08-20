@@ -1,166 +1,206 @@
-<x-mayordomo-layout title="Panel Operativo del Mayordomo">
+<x-mayordomo-layout title="Dashboard Mayordomo - AgroFinca">
   <!-- Cabecera de Página -->
   <x-slot name="header">
-    <h1>Panel Operativo del Mayordomo</h1>
-    <p>Bienvenido de nuevo, <strong>{{ Auth::user()->name }}</strong>. Monitorea y gestiona las operaciones en campo.</p>
+    <h1>Dashboard Operativo</h1>
+    <p>Panel de control consolidado con los indicadores clave de la finca en tiempo real</p>
   </x-slot>
 
   <!-- Notificaciones Flash -->
   @if (session('success'))
-    <div class="af-alert success">
+    <div class="af-alert success" style="margin-bottom: 20px;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       <span>{{ session('success') }}</span>
     </div>
   @endif
 
   @if (session('error'))
-    <div class="af-alert error">
+    <div class="af-alert error" style="margin-bottom: 20px;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
       <span>{{ session('error') }}</span>
     </div>
   @endif
 
   <!-- ======================================================================
-       TARJETAS KPI DEL MAYORDOMO
+       GRILLA COMPLETA DE TARJETAS KPI (3 x 3)
        ====================================================================== -->
-  <div class="bitacora-kpi-grid">
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; width: 100%;">
+
     <!-- 1. Trabajadores Activos -->
-    <div class="lotes-kpi-card green">
-      <div class="lotes-kpi-label">Trabajadores Activos</div>
-      <div class="lotes-kpi-number">{{ $trabajadoresActivos }}</div>
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #10b981; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Personal</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Trabajadores Activos</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.12); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          👷
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #047857; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $trabajadoresActivos }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Personal activo registrado en el sistema
+      </div>
     </div>
 
-    <!-- 2. Asistencias de Hoy -->
-    <div class="lotes-kpi-card blue">
-      <div class="lotes-kpi-label">Asistencias Hoy</div>
-      <div class="lotes-kpi-number">{{ $asistenciasHoy }}</div>
+    <!-- 2. Trabajadores en Labor -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #3b82f6; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Operatividad</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Trabajadores en Labor</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(59, 130, 246, 0.12); color: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          🌾
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #1d4ed8; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $trabajadoresEnLabor }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Colaboradores actualmente asignados a labores
+      </div>
     </div>
 
-    <!-- 3. Lotes en Producción -->
-    <div class="lotes-kpi-card yellow">
-      <div class="lotes-kpi-label">Lotes en Finca</div>
-      <div class="lotes-kpi-number">{{ $lotesActivos }}</div>
+    <!-- 3. Asistencia Marcada Hoy -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #059669; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Control Diario</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Asistencia Marcada Hoy</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(5, 150, 105, 0.12); color: #059669; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          ⏱️
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #059669; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $asistenciaHoy }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Registros de entrada completados en la jornada
+      </div>
     </div>
 
-    <!-- 4. Permiso Delegado -->
-    <div class="lotes-kpi-card {{ $permisoActivo ? 'green' : 'red' }}">
-      <div class="lotes-kpi-label">Liquidación Delegada</div>
-      <div style="font-size: 18px; font-weight: 800; margin-top: 4px; color: {{ $permisoActivo ? '#166534' : '#dc2626' }};">
+    <!-- 4. Solicitudes Pendientes -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #f59e0b; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Nuevos Registros</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Solicitudes Pendientes</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.12); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          📋
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #b45309; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $solicitudesPendientes }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Solicitudes de registro a la espera de aprobación
+      </div>
+    </div>
+
+    <!-- 5. Tareas Pendientes -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #eab308; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Labores</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Tareas Pendientes</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(234, 179, 8, 0.12); color: #ca8a04; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          ⏳
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #a16207; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $tareasPendientes }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Labores asignadas pendientes por iniciar
+      </div>
+    </div>
+
+    <!-- 6. Tareas en Progreso -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #06b6d4; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Ejecución</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Tareas en Progreso</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(6, 182, 212, 0.12); color: #06b6d4; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          ✅
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #0e7490; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $tareasEnProgreso }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Actividades agrícolas en ejecución activa
+      </div>
+    </div>
+
+    <!-- 7. Préstamos Pendientes -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #8b5cf6; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Bodega</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Préstamos Pendientes</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(139, 92, 246, 0.12); color: #8b5cf6; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          🔑
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #6d28d9; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ $prestamosPendientes }}
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Herramientas pendientes por entrega o devolución
+      </div>
+    </div>
+
+    <!-- 8. Producción del Día (kg) -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid #10b981; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Cosecha</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Producción del Día</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(16, 185, 129, 0.12); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          📈
+        </div>
+      </div>
+      <div style="font-size: 38px; font-weight: 800; color: #166534; line-height: 1; font-family: 'Outfit', sans-serif;">
+        {{ number_format($produccionHoy, 2) }} <span style="font-size: 18px; font-weight: 600; color: var(--text-muted);">kg</span>
+      </div>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        Total de kilos recolectados en la jornada de hoy
+      </div>
+    </div>
+
+    <!-- 9. Permiso de Liquidaciones Delegadas -->
+    <div class="af-table-card" style="padding: 24px; display: flex; flex-direction: column; justify-content: space-between; border-left: 4px solid {{ $permisoActivo ? '#10b981' : '#cbd5e1' }}; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+        <div>
+          <span style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Autorizaciones</span>
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--secondary-color); margin: 2px 0 0 0;">Liquidación Delegada</h3>
+        </div>
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: {{ $permisoActivo ? 'rgba(16, 185, 129, 0.12)' : 'rgba(148, 163, 184, 0.15)' }}; color: {{ $permisoActivo ? '#10b981' : '#64748b' }}; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+          🔐
+        </div>
+      </div>
+      <div style="font-size: 22px; font-weight: 800; color: {{ $permisoActivo ? '#166534' : '#64748b' }}; font-family: 'Outfit', sans-serif;">
         @if ($permisoActivo)
-          🟢 ACTIVO (Hasta {{ $permisoActivo->formatted_fecha_fin }})
+          🟢 ACTIVA
         @else
-          ⚪ Sin Permiso Activo
+          ⚪ Sin Permiso
         @endif
       </div>
-    </div>
-  </div>
-
-  <!-- ======================================================================
-       ACCIONES RÁPIDAS DE CAMPO
-       ====================================================================== -->
-  <div class="af-table-card" style="padding: 20px 24px; margin-bottom: 24px;">
-    <h3 style="font-size: 16px; font-weight: 700; color: var(--secondary-color); margin-bottom: 14px;">
-      ⚡ Accesos Rápidos de Operación
-    </h3>
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-      <a href="{{ url('/mayordomo/asistencias') }}" class="btn-primary" style="text-decoration: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Control de Asistencias</span>
-      </a>
-
-      <a href="{{ url('/mayordomo/produccion') }}" class="btn-secondary-action" style="text-decoration: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span>Registro de Cosechas</span>
-      </a>
-
-      <a href="{{ url('/mayordomo/inventario') }}" class="btn-secondary-action" style="text-decoration: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>
-        <span>Herramientas e Insumos</span>
-      </a>
-
-      <a href="{{ url('/mayordomo/liquidaciones') }}" class="btn-secondary-action" style="text-decoration: none;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span>Liquidaciones Delegadas</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- ======================================================================
-       GRILLA DE MONITOREO EN VIVO: ASISTENCIAS Y COSECHAS
-       ====================================================================== -->
-  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-    
-    <!-- 1. Últimas Asistencias -->
-    <div class="af-table-card" style="padding-top: 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px 12px 20px; border-bottom: 1px solid var(--border);">
-        <h3 style="font-size: 15px; font-weight: 700; color: var(--secondary-color); margin: 0;">⏱️ Asistencias Recientes</h3>
-        <a href="{{ url('/mayordomo/asistencias') }}" style="font-size: 12.5px; color: #10b981; font-weight: 600; text-decoration: none;">Ver todas &rarr;</a>
-      </div>
-      <div class="af-table-responsive">
-        <table class="af-table-data" style="font-size: 13px;">
-          <thead>
-            <tr>
-              <th>Trabajador</th>
-              <th>Fecha</th>
-              <th>Entrada</th>
-              <th>Salida</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($asistenciasRecientes as $asist)
-              <tr>
-                <td style="font-weight: 600; color: var(--secondary-color);">{{ $asist->trabajador_nombre }}</td>
-                <td>{{ $asist->formatted_fecha }}</td>
-                <td style="color: #15803d; font-weight: 600;">{{ $asist->formatted_hora_entrada }}</td>
-                <td>{{ $asist->formatted_hora_salida }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="4" class="table-empty-state" style="padding: 20px;">
-                  No hay asistencias registradas hoy.
-                </td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 2. Últimas Cosechas / Producción -->
-    <div class="af-table-card" style="padding-top: 16px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px 12px 20px; border-bottom: 1px solid var(--border);">
-        <h3 style="font-size: 15px; font-weight: 700; color: var(--secondary-color); margin: 0;">🌿 Cosechas Recientes</h3>
-        <a href="{{ url('/mayordomo/produccion') }}" style="font-size: 12.5px; color: #10b981; font-weight: 600; text-decoration: none;">Ver todas &rarr;</a>
-      </div>
-      <div class="af-table-responsive">
-        <table class="af-table-data" style="font-size: 13px;">
-          <thead>
-            <tr>
-              <th>Lote</th>
-              <th>Cultivo</th>
-              <th>Kilos</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse ($cosechasRecientes as $cos)
-              <tr>
-                <td style="font-weight: 600; color: var(--secondary-color);">{{ $cos->lote?->nombre ?? 'Lote' }}</td>
-                <td>
-                  <span class="pill-crop">{{ $cos->lote?->cultivo?->nombre ?? 'Cosecha' }}</span>
-                </td>
-                <td style="font-weight: 700; color: #166534;">{{ number_format((float)$cos->cantidad, 2) }} {{ $cos->unidad_medida ?? 'kg' }}</td>
-                <td style="color: var(--text-muted);">{{ $cos->formatted_fecha }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="4" class="table-empty-state" style="padding: 20px;">
-                  No hay registros de cosecha recientes.
-                </td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
+      <div style="font-size: 12.5px; color: var(--text-muted); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border);">
+        @if ($permisoActivo)
+          Vigente hasta el {{ $permisoActivo->formatted_fecha_fin }}
+        @else
+          No tienes autorización temporal delegada
+        @endif
       </div>
     </div>
 

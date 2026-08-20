@@ -8,6 +8,7 @@ use App\Http\Controllers\LoteController;
 use App\Http\Controllers\MayordomoController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\Mayordomo\DashboardController as MayordomoDashboardController;
+use App\Http\Controllers\Mayordomo\SolicitudController as MayordomoSolicitudController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\SolicitudRegistroController;
@@ -152,10 +153,15 @@ Route::middleware(['auth', 'role:ADMINISTRADOR'])->group(function () {
 });
 
 // =========================================================================
-// RUTAS DEL ROL MAYORDOMO (SOLO DASHBOARD OPERATIVO)
+// RUTAS DEL ROL MAYORDOMO
 // =========================================================================
 Route::middleware(['auth', 'role:MAYORDOMO'])->prefix('mayordomo')->name('mayordomo.')->group(function () {
     Route::get('/dashboard', [MayordomoDashboardController::class, 'index'])->name('dashboard');
+
+    // Módulo Solicitudes de Registro (Aprobación y Rechazo)
+    Route::get('/solicitudes', [MayordomoSolicitudController::class, 'index'])->name('solicitudes.index');
+    Route::patch('/solicitudes/{id}/aprobar', [MayordomoSolicitudController::class, 'aprobar'])->name('solicitudes.aprobar');
+    Route::patch('/solicitudes/{id}/rechazar', [MayordomoSolicitudController::class, 'rechazar'])->name('solicitudes.rechazar');
 });
 
 // =========================================================================

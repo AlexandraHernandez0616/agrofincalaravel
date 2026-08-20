@@ -31,10 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Dropdowns Management
-  const dropdownTriggers = document.querySelectorAll('[data-af-toggle="dropdown"]');
-  dropdownTriggers.forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
+  // Dropdowns Management with Event Delegation
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('[data-af-toggle="dropdown"]');
+    if (trigger) {
+      e.preventDefault();
       e.stopPropagation();
       const targetId = trigger.getAttribute('data-af-target');
       const targetMenu = document.getElementById(targetId);
@@ -49,12 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetMenu) {
         targetMenu.classList.toggle('show');
       }
-    });
-  });
+      return;
+    }
 
-  // Close dropdowns on outside click
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.af-dropdown-box') && !e.target.closest('[data-af-toggle="dropdown"]')) {
+    // Close dropdowns on outside click
+    if (!e.target.closest('.af-dropdown-box')) {
       document.querySelectorAll('.af-dropdown-box').forEach(menu => {
         menu.classList.remove('show');
       });
