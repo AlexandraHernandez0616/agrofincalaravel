@@ -1584,11 +1584,18 @@ ul, ol {
 /* ==========================================================================
    MÓDULOS DE TABLAS / GESTIÓN (IDÉNTICO A SCREENSHOT AGROFINCA)
    ========================================================================== */
-/* Barra de Búsqueda de Tablas */
+/* Barra de Búsqueda y Filtros de Tablas */
+.table-toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
 .table-search-bar-wrap {
   position: relative;
-  width: 100%;
-  margin-bottom: 24px;
+  flex: 1;
 }
 
 .table-search-bar-wrap .search-icon {
@@ -1629,6 +1636,40 @@ ul, ol {
 .table-search-bar-input::placeholder {
   color: #94a3b8;
   font-weight: 400;
+}
+
+.table-filter-select-wrap {
+  min-width: 140px;
+}
+
+.table-filter-select {
+  height: 50px;
+  width: 100%;
+  background: var(--white);
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-full);
+  padding: 0 36px 0 20px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-main);
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: var(--transition);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.table-filter-select:hover {
+  border-color: #cbd5e1;
+}
+
+.table-filter-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
 /* Contenedor de Tarjeta de Tabla */
@@ -1780,7 +1821,8 @@ ul, ol {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px 16px;
+  overflow-y: auto;
   animation: afFadeIn 0.2s ease-out;
 }
 
@@ -1795,11 +1837,20 @@ ul, ol {
   border: 1px solid var(--border);
   width: 100%;
   max-width: 600px;
-  max-height: 90vh;
+  max-height: calc(100vh - 48px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  margin: auto;
   animation: afModalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.af-modal-card form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 @keyframes afModalPop {
@@ -1808,12 +1859,13 @@ ul, ol {
 }
 
 .af-modal-header {
-  padding: 20px 26px;
+  padding: 18px 24px;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   background: var(--white);
+  flex-shrink: 0;
 }
 
 .af-modal-title-wrap {
@@ -1831,12 +1883,35 @@ ul, ol {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.af-modal-icon-badge.green {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.af-modal-icon-badge.blue {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.af-modal-icon-badge.amber {
+  background: #fef3c7;
+  color: #b45309;
 }
 
 .af-modal-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--secondary-color);
+  line-height: 1.2;
+}
+
+.af-modal-subtitle {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
 }
 
 .af-modal-close-btn {
@@ -1851,6 +1926,7 @@ ul, ol {
   border: none;
   cursor: pointer;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .af-modal-close-btn:hover {
@@ -1859,19 +1935,966 @@ ul, ol {
 }
 
 .af-modal-body {
-  padding: 24px 26px;
+  padding: 20px 24px;
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.af-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.af-modal-body::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.af-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 6px;
+}
+
+.af-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .af-modal-footer {
-  padding: 16px 26px;
+  padding: 14px 24px;
   border-top: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
   background: #f8fafc;
+  flex-shrink: 0;
 }
+
+/* ==========================================================================
+   GESTIÓN DE INVENTARIOS (HERRAMIENTAS E INSUMOS)
+   ========================================================================== */
+/* Grid de Tarjetas KPI Superiores */
+.inv-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 1024px) {
+  .inv-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .inv-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.inv-kpi-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  border: 1.5px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 105px;
+  transition: var(--transition);
+}
+
+.inv-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.inv-kpi-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.inv-kpi-number {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.inv-kpi-card.green {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+.inv-kpi-card.green .inv-kpi-number {
+  color: #166534;
+}
+
+.inv-kpi-card.amber {
+  background: #fffbeb;
+  border-color: #fef08a;
+}
+.inv-kpi-card.amber .inv-kpi-number {
+  color: #854d0e;
+}
+
+.inv-kpi-card.red {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.inv-kpi-card.red .inv-kpi-number {
+  color: #991b1b;
+}
+
+.inv-kpi-card.blue {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+.inv-kpi-card.blue .inv-kpi-number {
+  color: #1e40af;
+}
+
+/* Pestañas de Bodegas */
+.inv-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 24px;
+}
+
+.inv-tab-btn {
+  background: transparent;
+  border: none;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #64748b;
+  padding: 10px 4px 14px 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.inv-tab-btn:hover {
+  color: var(--primary-color);
+}
+
+.inv-tab-btn.active {
+  color: #059669;
+  font-weight: 700;
+}
+
+.inv-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 3px 3px 0 0;
+}
+
+/* Cabecera Interna de Bodega / Sección */
+.inv-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.inv-section-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--secondary-color);
+}
+
+/* Thumbnail Foto */
+.inv-table-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.pill-status-amber {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.pill-status-red {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* ==========================================================================
+   MÓDULO: LOTES, CULTIVOS Y PRODUCCIÓN (ESTILO AGROFINCA)
+   ========================================================================== */
+
+/* Pestañas de Navegación */
+.lotes-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 24px;
+  padding-bottom: 0;
+  overflow-x: auto;
+}
+
+.lotes-tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  padding: 8px 4px 14px 4px;
+  position: relative;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.lotes-tab-item:hover {
+  color: #059669;
+}
+
+.lotes-tab-item.active {
+  color: #059669;
+  font-weight: 700;
+}
+
+.lotes-tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #10b981;
+  border-radius: 3px 3px 0 0;
+}
+
+/* Cuadrícula de KPIs */
+.lotes-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .lotes-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lotes-kpi-card {
+  padding: 18px 20px;
+  border-radius: 16px;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lotes-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.lotes-kpi-card.green {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.lotes-kpi-card.blue {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.lotes-kpi-card.yellow {
+  background: #fefce8;
+  border: 1px solid #fef08a;
+}
+
+.lotes-kpi-card.red {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.lotes-kpi-card.red .lotes-kpi-number {
+  color: #dc2626;
+}
+
+.lotes-kpi-label {
+  font-size: 13.5px;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.lotes-kpi-number {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+/* Pills de Cultivos (Warm orange/yellow estilo AgroFinca) */
+.pill-crop {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 12.5px;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #92400e;
+  text-transform: lowercase;
+}
+
+/* Botón Ver Detalles en Tabla */
+.btn-ver-detalles {
+  color: #059669;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: var(--transition);
+}
+
+.btn-ver-detalles:hover {
+  color: #047857;
+  transform: translateX(2px);
+}
+
+/* Subencabezados internos de Pestañas */
+.lotes-tab-header {
+  margin-bottom: 20px;
+}
+
+.lotes-tab-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.lotes-tab-subtitle {
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+/* Grid de Tarjetas: Cultivos por Lote */
+.cultivos-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .cultivos-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.cultivo-lote-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px 24px;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+}
+
+.cultivo-lote-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.cultivo-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.cultivo-card-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cultivo-card-location {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.cultivo-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.cultivo-card-meta {
+  font-size: 13.5px;
+  color: #64748b;
+}
+
+.cultivo-card-arrow {
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.cultivo-lote-card:hover .cultivo-card-arrow {
+  color: #10b981;
+  transform: translateX(3px);
+}
+
+/* Grid de Tarjetas: Producción por Lote */
+.produccion-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .produccion-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.produccion-lote-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: var(--transition);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.produccion-lote-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.produccion-card-info h4 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 2px;
+}
+
+.produccion-card-crop {
+  font-size: 13.5px;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.produccion-card-stat {
+  font-size: 13.5px;
+  color: #334155;
+  margin-bottom: 3px;
+}
+
+.produccion-card-stat strong {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.produccion-chart-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   MÓDULO: GESTIÓN DE TARIFAS DE PAGO (ESTILO AGROFINCA)
+   ========================================================================== */
+
+.tarifas-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 992px) {
+  .tarifas-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .tarifas-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pill-btn-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-family: inherit;
+}
+
+.pill-btn-toggle.deshabilitar {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.pill-btn-toggle.deshabilitar:hover {
+  background: #fca5a5;
+  color: #991b1b;
+}
+
+.pill-btn-toggle.habilitar {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pill-btn-toggle.habilitar:hover {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+.action-icon-btn.btn-edit-orange {
+  color: #ea580c;
+  background: transparent;
+}
+
+.action-icon-btn.btn-edit-orange:hover {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+/* ==========================================================================
+   MÓDULO: GESTIÓN DE LIQUIDACIONES (ESTILO AGROFINCA)
+   ========================================================================== */
+
+.liquidaciones-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .liquidaciones-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .liquidaciones-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pill-status-blue {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.pill-btn-toggle.liquidar {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.pill-btn-toggle.liquidar:hover {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+.pill-btn-toggle.generar {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.pill-btn-toggle.generar:hover {
+  background: #bfdbfe;
+  color: #1e40af;
+}
+
+/* Tarjeta de Resumen y Cálculo en Vivo */
+.af-calc-summary-card {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1.5px solid #a7f3d0;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.af-calc-summary-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #065f46;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.af-calc-breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: #047857;
+  margin-bottom: 5px;
+}
+
+.af-calc-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px dashed #6ee7b7;
+  padding-top: 10px;
+  margin-top: 8px;
+}
+
+.af-calc-total-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.af-calc-total-amount {
+  font-size: 22px;
+  font-weight: 800;
+  color: #047857;
+}
+
+/* Quick concept chips */
+.concept-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.concept-chip {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #475569;
+  cursor: pointer;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.concept-chip:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
+.worker-preview-badge {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #334155;
+  margin-top: -4px;
+  margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   MÓDULO: GESTIÓN DE PAGOS (ESTILO AGROFINCA)
+   ========================================================================== */
+
+.pagos-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .pagos-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .pagos-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   MÓDULO: AUTORIZACIONES DELEGADAS / LIQUIDACIONES TEMPORALES
+   ========================================================================== */
+
+.autorizaciones-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .autorizaciones-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .autorizaciones-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pill-status-gray {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.pill-status-red {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ==========================================================================
+   MÓDULO: BITÁCORA DE OPERACIONES (AUDITORÍA)
+   ========================================================================== */
+
+.bitacora-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .bitacora-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .bitacora-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   MÓDULO: REPORTES DEL SISTEMA (ESTILO AGROFINCA)
+   ========================================================================== */
+
+.reportes-filter-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 22px 26px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.reportes-filter-title {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--secondary-color);
+  margin-bottom: 16px;
+}
+
+.reportes-form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 1024px) {
+  .reportes-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .reportes-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.btn-export-pdf {
+  background: #dc2626;
+  color: #ffffff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn-export-pdf:hover {
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+.btn-export-excel {
+  background: #16a34a;
+  color: #ffffff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.btn-export-excel:hover {
+  background: #15803d;
+  color: #ffffff;
+}
+
+@media print {
+  .sidebar-container,
+  .top-header,
+  .reportes-filter-card,
+  .table-toolbar-row,
+  .btn-export-pdf,
+  .btn-export-excel,
+  .footer-container {
+    display: none !important;
+  }
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .af-table-card {
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ==========================================================================
+   SIDEBAR MAYORDOMO (ESTILO EXACTO AGROFINCA)
+   ========================================================================== */
+
+.mayordomo-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mayordomo-nav-item {
+  margin: 0;
+}
+
+.mayordomo-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mayordomo-nav-link:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  transform: translateX(3px);
+}
+
+.mayordomo-nav-link.active {
+  background: #22c55e !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
+  transform: translateX(0);
+}
+
+.mayordomo-nav-link.active .mayordomo-nav-icon svg {
+  stroke: #ffffff;
+}
+
+.mayordomo-nav-icon {
+  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+
+
+
+
+
+
+
+
+
 
 

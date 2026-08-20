@@ -26,10 +26,31 @@
         <span>AgroFinca</span>
       </a>
       <nav class="menu">
-        <a href="#">Inicio</a>
+        <a href="{{ url('/') }}">Inicio</a>
         <a href="#proposito">Nuestro Propósito</a>
-        <a href="#">Servicios</a>
-        <a href="{{ url('/login') }}" class="nav-btn">Ingresar</a>
+        @auth
+          <div class="nav-user-pill">
+            <span class="user-pill-avatar">{{ Auth::user()->initials }}</span>
+            <span class="user-pill-name">{{ Auth::user()->name }}</span>
+          </div>
+          <a href="{{ route('dashboard') }}" class="nav-btn nav-btn-admin">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Panel de Control</span>
+          </a>
+          <form method="POST" action="{{ route('logout') }}" style="display: inline-flex; margin-left: 10px;">
+            @csrf
+            <button type="submit" class="nav-btn-logout" title="Cerrar Sesión">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              <span>Salir</span>
+            </button>
+          </form>
+        @else
+          <a href="{{ route('register') }}" class="nav-link-register">Solicitar Acceso</a>
+          <a href="{{ route('login') }}" class="nav-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+            <span>Ingresar</span>
+          </a>
+        @endauth
       </nav>
     </div>
   </header>
@@ -53,10 +74,22 @@
             Descubre las mejores herramientas y soluciones tecnológicas 
             aplicadas para maximizar el rendimiento de tus cosechas.
           </p>
-          <a href="{{ url('/login') }}" class="btn-primary animate-up delay-2">
-            Empezar Ahora
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          @auth
+            <a href="{{ route('dashboard') }}" class="btn-primary animate-up delay-2">
+              Ir al Panel de Control
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          @else
+            <div class="hero-cta-group animate-up delay-2">
+              <a href="{{ route('login') }}" class="btn-primary">
+                Iniciar Sesión
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </a>
+              <a href="{{ route('register') }}" class="btn-secondary-glass">
+                Solicitar Registro
+              </a>
+            </div>
+          @endauth
         </div>
       </div>
       
@@ -69,9 +102,17 @@
           <p class="animate-up delay-1">
             Lleva un registro preciso de cada etapa, desde la siembra hasta la cosecha, con nuestras herramientas avanzadas.
           </p>
-          <a href="{{ url('/login') }}" class="btn-primary animate-up delay-2">
-            Ver Módulos
-          </a>
+          @auth
+            <a href="{{ url('/inventario') }}" class="btn-primary animate-up delay-2">
+              Ver Módulos e Inventarios
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          @else
+            <a href="{{ route('login') }}" class="btn-primary animate-up delay-2">
+              Ingresar al Sistema
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          @endauth
         </div>
       </div>
       
@@ -84,9 +125,17 @@
           <p class="animate-up delay-1">
             Optimiza recursos como el agua y los fertilizantes con tecnología de precisión y protege el medio ambiente.
           </p>
-          <a href="{{ url('/login') }}" class="btn-primary animate-up delay-2">
-            Únete Hoy
-          </a>
+          @auth
+            <a href="{{ route('dashboard') }}" class="btn-primary animate-up delay-2">
+              Gestionar Operaciones
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          @else
+            <a href="{{ route('register') }}" class="btn-primary animate-up delay-2">
+              Únete Hoy - Solicitar Acceso
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 8px;"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          @endauth
         </div>
       </div>
     </div>
@@ -172,10 +221,23 @@
 
       <div class="footer-col">
         <h4>Enlaces Rápidos</h4>
-        <a href="#">Inicio</a>
+        <a href="{{ url('/') }}">Inicio</a>
         <a href="#proposito">Nuestro Propósito</a>
-        <a href="#">Módulos del Sistema</a>
-        <a href="{{ url('/login') }}">Acceso a Usuarios</a>
+        @auth
+          <a href="{{ route('dashboard') }}">Panel de Control (Dashboard)</a>
+          <a href="{{ route('profile.edit') }}">Mi Perfil</a>
+          <a href="{{ url('/inventario') }}">Inventario y Bodegas</a>
+          <form method="POST" action="{{ route('logout') }}" style="display: block; margin-top: 6px;">
+            @csrf
+            <button type="submit" style="background: none; border: none; padding: 0; color: #94a3b8; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" onmouseover="this.style.color='#10b981'" onmouseout="this.style.color='#94a3b8'">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              Cerrar Sesión
+            </button>
+          </form>
+        @else
+          <a href="{{ route('login') }}">Iniciar Sesión</a>
+          <a href="{{ route('register') }}">Solicitud de Registro</a>
+        @endauth
       </div>
 
       <div class="footer-col">

@@ -108,4 +108,12 @@ class User extends Authenticatable
             return substr($this->fecha_creacion, 0, 10);
         }
     }
+
+    /**
+     * Relationship to trabajador profile.
+     */
+    public function trabajador()
+    {
+        return $this->hasOne(Trabajador::class, 'id_usuario', 'id_usuario');
+    }
 }

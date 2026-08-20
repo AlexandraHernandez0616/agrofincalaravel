@@ -131,22 +131,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Table Live Search Filter
+  // Table Live Search & State Filter
   const tableLiveSearch = document.getElementById('tableLiveSearch');
-  if (tableLiveSearch) {
-    tableLiveSearch.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase().trim();
-      const rows = document.querySelectorAll('.af-table-data tbody tr');
-      rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(term)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+  const tableStateFilter = document.getElementById('tableStateFilter');
+
+  function applyTableFilters() {
+    const searchTerm = tableLiveSearch ? tableLiveSearch.value.toLowerCase().trim() : '';
+    const stateFilter = tableStateFilter ? tableStateFilter.value.toLowerCase().trim() : 'todos';
+    const rows = document.querySelectorAll('.af-table-data tbody tr');
+
+    rows.forEach(row => {
+      if (row.querySelector('.table-empty-state')) return;
+      const text = row.textContent.toLowerCase();
+      const statusCell = row.getAttribute('data-status') || text;
+      
+      const matchesSearch = !searchTerm || text.includes(searchTerm);
+      const matchesState = (stateFilter === 'todos' || !stateFilter) || statusCell.toLowerCase().includes(stateFilter);
+
+      if (matchesSearch && matchesState) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
     });
   }
+
+  if (tableLiveSearch) {
+    tableLiveSearch.addEventListener('input', applyTableFilters);
+  }
+  if (tableStateFilter) {
+    tableStateFilter.addEventListener('change', applyTableFilters);
+  }
 });
+
 
 

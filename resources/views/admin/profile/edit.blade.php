@@ -98,10 +98,10 @@
     <!-- Columna Derecha: Secciones y Formularios -->
     <main class="profile-main-col">
       <!-- Formulario 1: Datos Personales -->
-      @include('profile.partials.update-profile-information-form')
+      @include('admin.profile.partials.update-profile-information-form')
 
       <!-- Formulario 2: Contraseña y Seguridad -->
-      @include('profile.partials.update-password-form')
+      @include('admin.profile.partials.update-password-form')
     </main>
 
   </div>

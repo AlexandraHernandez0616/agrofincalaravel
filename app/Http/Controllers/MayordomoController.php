@@ -32,7 +32,7 @@ class MayordomoController extends Controller
 
         $mayordomos = $query->orderBy('id_usuario', 'desc')->paginate(15)->withQueryString();
 
-        return view('mayordomos.index', compact('mayordomos', 'search'));
+        return view('admin.mayordomos.index', compact('mayordomos', 'search'));
     }
 
     /**

@@ -42,11 +42,43 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $user = \App\Models\User::where('username', $this->input('username'))->first();
+
+        // 1. Si el usuario existe en la tabla usuarios pero está inactivo
+        if ($user && ! $user->activo) {
+            RateLimiter::hit($this->throttleKey());
+            throw ValidationException::withMessages([
+                'username' => 'Tu cuenta se encuentra inactiva. Por favor contacta al Mayordomo o Administrador.',
+            ]);
+        }
+
+        // 2. Si no existe en usuarios, verificar si tiene una solicitud en solicitudes_registros
+        if (! $user) {
+            $solicitud = \App\Models\SolicitudRegistro::where('username', $this->input('username'))
+                ->orWhere('documento', $this->input('username'))
+                ->latest('id_solicitud')
+                ->first();
+
+            if ($solicitud) {
+                RateLimiter::hit($this->throttleKey());
+                if ($solicitud->estado === 'PENDIENTE') {
+                    throw ValidationException::withMessages([
+                        'username' => 'Tu solicitud de acceso como trabajador aún está pendiente de aprobación por el Mayordomo.',
+                    ]);
+                } elseif ($solicitud->estado === 'RECHAZADA') {
+                    $obs = $solicitud->observacion ? " Motivo: {$solicitud->observacion}" : '';
+                    throw ValidationException::withMessages([
+                        'username' => "Tu solicitud de acceso fue rechazada por el Mayordomo.{$obs}",
+                    ]);
+                }
+            }
+        }
+
         if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'username' => trans('auth.failed'),
+                'username' => 'Las credenciales ingresadas no son correctas.',
             ]);
         }
 
